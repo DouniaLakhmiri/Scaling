@@ -92,8 +92,8 @@ class Evaluator(object):
         if self.dataset == 'MINIMNIST':
             max_epochs = 50
 
-        scheduler = optim.lr_scheduler.ReduceLROnPlateau(self.optimizer, patience=150, verbose=True)
-
+        # scheduler = optim.lr_scheduler.ReduceLROnPlateau(self.optimizer, patience=150, verbose=True)
+        # scheduler = optim.lr_scheduler.CosineAnnealingLR(self.optimizer, T_max=max_epochs, eta_min=0)
         while (not stop) and (epoch < max_epochs):
 
             train_loss, train_acc = self.train()
@@ -110,8 +110,15 @@ class Evaluator(object):
                   "Best val acc: {:.3f}".format(epoch + 1, train_loss, train_acc, test_loss, test_acc, best_test_acc))
             epoch += 1
 
-            if self.optimizer.__class__.__name__ == 'SGD':
-                scheduler.step(test_loss)
+            # if self.optimizer.__class__.__name__ == 'SGD':
+            # scheduler.step(test_loss)
+
+            if epoch == 150:
+                print('Update learning rate at epoch 150 : ')
+                for param in self.optimizer.param_groups:
+                    param['lr'] /= 10
+                print('Then load the best weights ')
+                self.cnn.load_state_dict(torch.load('best_model.pth'))
 
         print('> Finished Training')
         print('Best validation accuracy and corresponding epoch number : {:.3f}/{}'.format(
