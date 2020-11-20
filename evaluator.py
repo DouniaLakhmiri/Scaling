@@ -26,6 +26,7 @@ import torch.backends.cudnn as cudnn
 import torch.nn as nn
 # from datahandler import *
 import numpy as np
+import statistics
 
 
 # sys.path.append(os.environ.get('HYPERNOMAD_HOME')+"/src/blackbox/blackbox")
@@ -88,6 +89,7 @@ class Evaluator(object):
         best_test_acc = 0
         best_epoch = 0
         max_epochs = 200
+        ltest_acc = []
 
         if self.dataset == 'MINIMNIST':
             max_epochs = 50
@@ -99,6 +101,7 @@ class Evaluator(object):
             train_loss, train_acc = self.train()
 
             test_loss, test_acc = self.test()
+            ltest_acc.append(test_acc)
 
             # save weights of best test score
             if test_acc > best_test_acc:
@@ -110,8 +113,16 @@ class Evaluator(object):
                   "Best val acc: {:.3f}".format(epoch + 1, train_loss, train_acc, test_loss, test_acc, best_test_acc))
             epoch += 1
 
-            # if self.optimizer.__class__.__name__ == 'SGD':
-            # scheduler.step(test_loss)
+            # Stop early
+            if (epoch == 25) and (best_test_acc < 20):
+                stop = True
+
+            # Early stopping criteria
+            if (epoch > 149) and (epoch % 50 == 0):
+                l_val = ltest_acc[epoch - 50:epoch]
+                std_val = statistics.stdev(l_val)
+                if std_val < 0.01:
+                    stop = True
 
             if epoch == 150:
                 print('Update learning rate at epoch 150 : ')
