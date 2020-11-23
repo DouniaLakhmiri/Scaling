@@ -7,7 +7,7 @@ if len(sys.argv) != 2:
     exit()
 
 
-fin = open(sys.argv[2], 'r')
+fin = open(sys.argv[1], 'r')
 Lin = fin.readlines()
 Xin = Lin[0].split()
 fin.close()
