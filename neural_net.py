@@ -6,9 +6,11 @@ Reference:
 [1] Kaiming He, Xiangyu Zhang, Shaoqing Ren, Jian Sun
     Deep Residual Learning for Image Recognition. arXiv:1512.03385
 '''
+
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
+import numpy as np
 
 
 class BasicBlock(nn.Module):
@@ -71,8 +73,9 @@ class Bottleneck(nn.Module):
 
 
 class ResNet(nn.Module):
-    def __init__(self, block, num_blocks, width_multip=1,  num_classes=10):
+    def __init__(self, block, num_blocks, image_size, width_multip=1,  num_classes=10):
         super(ResNet, self).__init__()
+        self.image_size = image_size
         self.in_planes = int(round(64 * width_multip))
 
         self.conv1 = nn.Conv2d(3, self.in_planes, kernel_size=3,
@@ -82,7 +85,9 @@ class ResNet(nn.Module):
         self.layer2 = self._make_layer(block, int(round(128 * width_multip)), num_blocks[1], stride=2)
         self.layer3 = self._make_layer(block, int(round(256 * width_multip)), num_blocks[2], stride=2)
         self.layer4 = self._make_layer(block, int(round(512 * width_multip)), num_blocks[3], stride=2)
-        self.linear = nn.Linear(512*block.expansion, num_classes)
+        # self.linear = nn.Linear(512*block.expansion, num_classes)
+        size_fc_layer = self.get_input_size_first_lin_layer()
+        self.linear = nn.Linear(size_fc_layer, num_classes)
 
     def _make_layer(self, block, planes, num_blocks, stride):
         strides = [stride] + [1]*(num_blocks-1)
@@ -93,15 +98,41 @@ class ResNet(nn.Module):
         return nn.Sequential(*layers)
 
     def forward(self, x):
+        # print(x.shape)
         out = F.relu(self.bn1(self.conv1(x)))
+        # print(out.shape)
+        out = self.layer1(out)
+        # print(out.shape)
+        out = self.layer2(out)
+        # print(out.shape)
+        out = self.layer3(out)
+        # print(out.shape)
+        out = self.layer4(out)
+        # print(out.shape)
+        out = F.avg_pool2d(out, 4)
+        # print(out.shape)
+        out = out.view(out.size(0), -1)
+        # print(out.shape)
+        out = self.linear(out)
+        return out
+
+    def get_input_size_first_lin_layer(self):
+        """
+        :return: current_size
+        """
+        current_size = self.image_size
+        dsize = (1, 3, current_size, current_size)
+        inputs = torch.randn(dsize)
+
+        out = F.relu(self.bn1(self.conv1(inputs)))
         out = self.layer1(out)
         out = self.layer2(out)
         out = self.layer3(out)
         out = self.layer4(out)
         out = F.avg_pool2d(out, 4)
         out = out.view(out.size(0), -1)
-        out = self.linear(out)
-        return out
+        current_size = out.shape[1]
+        return current_size
 
 
 def ResNet18():
@@ -131,7 +162,7 @@ def test():
 
 
 class NeuralNet(nn.Module):
-    def __init__(self, depth, width):
+    def __init__(self, depth, width, initial_image_size):
         """
             Initialize a scaled ResNet18 type network.
         """
@@ -139,6 +170,7 @@ class NeuralNet(nn.Module):
         super(NeuralNet, self).__init__()
         self.depth = depth
         self.width = width
+        self.image_size = initial_image_size
         self.model = self.build_network()
 
     def build_network(self):
@@ -149,7 +181,7 @@ class NeuralNet(nn.Module):
         layers = [2, 2, 2, 2]
         layers = [x*int(round(self.depth)) for x in layers]
         print(layers)
-        return ResNet(BasicBlock, layers, self.width)
+        return ResNet(BasicBlock, layers, self.image_size, self.width)
 
     def forward(self, x):
         return self.model.forward(x)
