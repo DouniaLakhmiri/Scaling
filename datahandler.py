@@ -28,7 +28,6 @@ import random
 import os
 import sys
 
-
 sys.path.append(os.environ.get('HYPERNOMAD_HOME') + "/src/blackbox/blackbox")
 
 
@@ -166,18 +165,21 @@ class DataHandler(object):
 
         if self.dataset in ['CIFAR10', 'CIFAR100']:
 
+            new_image_size = int(32 * resolution)
+            print(new_image_size)
             transform_train = transforms.Compose([
-                                                  # transforms.Resize(int(32*resolution)),
-                                                  transforms.RandomCrop(32, padding=4),     # resolution
-                                                  transforms.RandomHorizontalFlip(),
-                                                  transforms.ToTensor(),
-                                                  transforms.Normalize([0.4914, 0.4822, 0.4465],
-                                                                       [0.2023, 0.1994, 0.2010]),
-                                                  # AutoAugment(),
-                                                  # Cutout()
-                                                  ])
+                transforms.Resize((new_image_size, new_image_size)),
+                # transforms.RandomCrop(int(32*resolution), padding=4),  # resolution
+                # transforms.RandomHorizontalFlip(),
+                transforms.ToTensor(),
+                transforms.Normalize([0.4914, 0.4822, 0.4465],
+                                     [0.2023, 0.1994, 0.2010]),
+                # AutoAugment(),
+                # Cutout()
+            ])
 
-            transform_test = transforms.Compose([transforms.ToTensor(),
+            transform_test = transforms.Compose([transforms.Resize((new_image_size, new_image_size)),
+                                                 transforms.ToTensor(),
                                                  transforms.Normalize([0.4914, 0.4822, 0.4465],
                                                                       [0.2023, 0.1994, 0.2010]),
                                                  ])
