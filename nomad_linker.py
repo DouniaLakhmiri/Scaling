@@ -33,8 +33,8 @@ for line in Lout:
         flops_ratio = str(tmp[-1])
         macs_ration = str(tmp[-2])
 
-    print(acc, macs_ration, flops_ratio)
-    exit()
+        print(acc, macs_ration, flops_ratio)
+        exit()
 
 print('Inf', 'Inf', 'Inf')
 fout.close()
