@@ -6,7 +6,7 @@ import torch.backends.cudnn as cudnn
 import os
 import sys
 from evaluator import *
-from neural_net2 import *
+from neural_net import *
 from datahandler import DataHandler
 from thop import clever_format, profile
 
@@ -50,7 +50,7 @@ optimizer = optim.SGD(model.parameters(), lr=0.1, momentum=0.9, weight_decay=5e-
 evaluator = Evaluator(device, model, trainloader, testloader, optimizer, batch_size, dataset)
 print('> Training')
 # try:
-# best_val_acc, best_epoch, nb_epochs = evaluator.train_and_test()
+best_val_acc, best_epoch, nb_epochs = evaluator.train_and_test()
 # print(best_val_acc)
 cnt = 1
 dsize = (1, 3, initial_image_size, initial_image_size)
@@ -58,7 +58,7 @@ inputs = torch.randn(dsize).to(device)
 macs, params = profile(model, (inputs,), verbose=False)
 #
 # # Output of the blackbox
-# print('> Final accuracy %.3f' % best_val_acc)
+print('> Final accuracy %.3f' % best_val_acc)
 
 # For ResNet18 with an image size of 32
 macs_baseline = 556651520
