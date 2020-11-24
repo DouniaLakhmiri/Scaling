@@ -1,25 +1,3 @@
-# ------------------------------------------------------------------------------
-#  HyperNOMAD - Hyper-parameter optimization of deep neural networks with
-#  NOMAD.
-#
-#
-#
-#  This program is free software: you can redistribute it and/or modify it
-#  under the terms of the GNU Lesser General Public License as published by
-#  the Free Software Foundation, either version 3 of the License, or (at your
-#  option) any later version.
-#
-#  This program is distributed in the hope that it will be useful, but WITHOUT
-#  ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
-#  FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License
-#  for more details.
-#
-#  You should have received a copy of the GNU Lesser General Public License
-#  along with this program. If not, see <http://www.gnu.org/licenses/>.
-#
-#  You can find information on the NOMAD software at www.gerad.ca/nomad
-# ------------------------------------------------------------------------------
-
 import torch
 import torchvision
 import torchvision.transforms as transforms
@@ -169,7 +147,7 @@ class DataHandler(object):
             print(new_image_size)
             transform_train = transforms.Compose([
                 transforms.Resize((new_image_size, new_image_size)),
-                # transforms.RandomCrop(int(32*resolution), padding=4),  # resolution
+                transforms.RandomCrop(new_image_size, padding=4),  # resolution
                 # transforms.RandomHorizontalFlip(),
                 transforms.ToTensor(),
                 transforms.Normalize([0.4914, 0.4822, 0.4465],
