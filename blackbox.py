@@ -6,7 +6,7 @@ import torch.backends.cudnn as cudnn
 import os
 import sys
 from evaluator import *
-from neural_net2 import *
+from neural_net import *
 from datahandler import DataHandler
 from thop import clever_format, profile
 
