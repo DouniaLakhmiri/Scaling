@@ -5,7 +5,7 @@ BB_OUTPUT_TYPE          OBJ   EB  EB
 BB_INPUT_TYPE           ( R  R  R )
 
 X0                      (  1  1  1)
-LOWER_BOUND             ( 0.5 0.5 0.5 )
+LOWER_BOUND             ( 0.25 0.015 0.03 )
 UPPER_BOUND             ( 2.5  2.5  2.5 )
 
 MAX_BB_EVAL             200
