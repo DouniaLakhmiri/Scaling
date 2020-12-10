@@ -10,3 +10,4 @@ UPPER_BOUND             ( 2.5  2.5  2.5 )
 
 MAX_BB_EVAL             200
 DISPLAY_DEGREE          3
+HISTORY_FILE            "history.txt"
