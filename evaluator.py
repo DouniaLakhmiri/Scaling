@@ -78,7 +78,7 @@ class Evaluator(object):
     def dataset(self):
         return self.__dataset
 
-    def train_and_test(self):
+        def train_and_test(self):
 
         if torch.cuda.is_available():
             self.cnn = torch.nn.DataParallel(self.cnn)
@@ -88,18 +88,17 @@ class Evaluator(object):
         stop = False
         best_test_acc = 0
         best_epoch = 0
-        max_epochs = 200
+        max_epochs = 50
         ltest_acc = []
 
         if self.dataset == 'MINIMNIST':
             max_epochs = 50
 
         # scheduler = optim.lr_scheduler.ReduceLROnPlateau(self.optimizer, patience=150, verbose=True)
-        # scheduler = optim.lr_scheduler.CosineAnnealingLR(self.optimizer, T_max=max_epochs, eta_min=0)
+        scheduler = optim.lr_scheduler.CosineAnnealingLR(self.optimizer, T_max=200, eta_min=0)
         while (not stop) and (epoch < max_epochs):
 
             train_loss, train_acc = self.train()
-
             test_loss, test_acc = self.test()
             ltest_acc.append(test_acc)
 
@@ -113,29 +112,13 @@ class Evaluator(object):
                   "Best val acc: {:.3f}".format(epoch + 1, train_loss, train_acc, test_loss, test_acc, best_test_acc))
             epoch += 1
 
-            # Stop early
-            if (epoch == 25) and (best_test_acc < 20):
-                stop = True
-
-            # Early stopping criteria
-            if (epoch > 149) and (epoch % 50 == 0):
-                l_val = ltest_acc[epoch - 50:epoch]
-                std_val = statistics.stdev(l_val)
-                if std_val < 0.01:
-                    stop = True
-
-            if epoch == 150:
-                print('Update learning rate at epoch 150 : ')
-                for param in self.optimizer.param_groups:
-                    param['lr'] /= 10
-                print('Then load the best weights ')
-                self.cnn.load_state_dict(torch.load('best_model.pth'))
+            scheduler.step()
 
         print('> Finished Training')
         print('Best validation accuracy and corresponding epoch number : {:.3f}/{}'.format(
             best_test_acc, best_epoch + 1))
         return best_test_acc, best_epoch, epoch
-
+    
     def train(self):
         self.cnn.train()
         criterion = nn.CrossEntropyLoss().cuda()
