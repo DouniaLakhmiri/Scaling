@@ -6,7 +6,7 @@ import torch.backends.cudnn as cudnn
 import os
 import sys
 from evaluator import *
-from neural_net import *
+from neural_net2 import *
 from datahandler import DataHandler
 from thop import clever_format, profile
 
@@ -29,12 +29,7 @@ dataloader = DataHandler(dataset, batch_size)
 image_size, number_classes = dataloader.get_info_data
 trainloader, testloader = dataloader.get_loaders(resolution=resolution)
 
-# for batch in testloader:
-#     print(batch[0].size())
-#
-# for batch in trainloader:
-#     print(batch[0].size())
-#
+
 initial_image_size = int(32*resolution)
 total_classes = 10
 number_input_channels = 3
@@ -64,6 +59,6 @@ print('> Final accuracy %.3f' % best_val_acc)
 macs_baseline = 556651520
 flops_baseline = 11173962
 
-ratio_macs = macs / macs_baseline - 2.5
-ratio_flops = params / flops_baseline - 2.5
+ratio_macs = macs / macs_baseline - 1.0
+ratio_flops = params / flops_baseline - 1.0
 print('MACS and FLOPS', ratio_macs, ratio_flops)
