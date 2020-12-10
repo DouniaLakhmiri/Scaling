@@ -78,7 +78,7 @@ class Evaluator(object):
     def dataset(self):
         return self.__dataset
 
-        def train_and_test(self):
+    def train_and_test(self):
 
         if torch.cuda.is_available():
             self.cnn = torch.nn.DataParallel(self.cnn)
