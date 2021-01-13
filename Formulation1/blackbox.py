@@ -59,6 +59,6 @@ print('> Final accuracy %.3f' % best_val_acc)
 macs_baseline = 556651520
 flops_baseline = 11173962
 
-const_macs = macs - macs_baseline
-const_flops = params - flops_baseline
+const_macs = macs_baseline - macs
+const_flops = flops_baseline - params
 print('MACS and FLOPS', const_macs, const_flops)
