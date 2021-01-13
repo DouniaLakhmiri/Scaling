@@ -54,7 +54,7 @@ macs, params = profile(model, (inputs,), verbose=False)
 
 
 # # Output of the blackbox
-print('> Accuracy %.3f' % (87 - best_val_acc))
+print('> Accuracy %.3f' % (94.0 - best_val_acc))
 print('FLOPS %.3f' % params)
 
 # For ResNet18 with an image size of 32
