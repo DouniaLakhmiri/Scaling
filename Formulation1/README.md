@@ -15,7 +15,8 @@
 ### Outputs:
 
 * Objective function: Validation accuracy of the network
-* Constraint value: (FLOPS of the current network) - ( FLOPS of ResNet18)
+* Constraint value:  (MACS of ResNet18) - (MACS of the current network)
+* Constraint value:  (FLOPS of ResNet18) - (FLOPS of the current network)
 
 
 ### Testing one blackbox evaluation
