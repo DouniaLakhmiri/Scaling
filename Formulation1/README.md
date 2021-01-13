@@ -1,7 +1,7 @@
 # Running Formulation 1
 
 
-[Formulation1](DouniaLakhmiri.github.com/Scaling/Formulation1/formulation1.jpg)
+![Formulation1](formulation1.jpg)
 
 
 ## Inside the blackbox
