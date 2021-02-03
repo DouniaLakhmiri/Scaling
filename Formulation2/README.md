@@ -1,7 +1,7 @@
 # Running Formulation 2
 
 
-![Formulation2](formulation2.jpg)
+![Formulation2](formulation2.png)
 
 
 ## Inside the blackbox
