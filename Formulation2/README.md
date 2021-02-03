@@ -1,7 +1,7 @@
 # Running Formulation 2
 
 
-![Formulation2](formulation2.png)
+![Formulation2](Formulation2.png)
 
 
 ## Inside the blackbox
@@ -14,8 +14,8 @@
 
 ### Outputs:
 
-* Objective function: Number of FLOPS of the current network
-* Constraint value: (Validation accuracy of ResNet18) - (Validation accuracy of current network)
+* Objective function: Number of MACS of the current network
+* Constraint value: (Validation accuracy of ResNet18) - (Validation accuracy of current network) < 0 
 
 
 ### Testing one blackbox evaluation
@@ -35,10 +35,13 @@ The file parameter_file.txt allows to define the Hyperparameter Optimization pro
 
 ```
 DIMENSION               3                               # NOMAD optimizes 3 hyperparameters
-BB_EXE                  "$python ./nomad_linker2.py"     # The script that links NOMAD to this blackbox
+BB_EXE                  "$python ./nomad_linker2.py"    # The script that links NOMAD to this blackbox
 
-BB_OUTPUT_TYPE          OBJ   EB  EB                    # The blackbox returns 3 outputs: The objective function and the constraints on 
-                                                        the FLOPS and MACS
+BB_OUTPUT_TYPE          OBJ   EB  -                     # The blackbox returns 3 outputs: 
+                                                        # OBJ : number of MACS
+                                                        # EB : Extreme Barrier for the constraint:
+                                                        #     (Validation accuracy of ResNet18) - (Validation accuracy of current network) < 0 
+                                                        #  - : Number of parameters
                                                         
 BB_INPUT_TYPE           ( R  R  R )                     # d, w and r and Real hyperparameters
 
