@@ -23,18 +23,26 @@ os.system(syst_cmd)
 fout = open('out.txt', 'r')
 Lout = fout.readlines()
 for line in Lout:
+    
+    if 'MACS' in line:
+        tmp = line.split()
+        macs = str(tmp[-1])
+        
+        
     if "Accuracy" in line:
         tmp = line.split()
-        acc = str(tmp[-1])
-        fout.close()
-
-    if 'FLOPS' in line:
+        diff_acc = str(tmp[-1])
+        
+        
+    if "Parameters" in line: 
         tmp = line.split()
-        flops = str(tmp[-1])
+        params = str(tmp[-1])
+        fout.close()
+    
 
-        print(flops, acc)
+        print(macs, diff_acc, params)
         exit()
 
-print('Inf', 'Inf')
+print('Inf', 'Inf', 'Inf')
 fout.close()
 
