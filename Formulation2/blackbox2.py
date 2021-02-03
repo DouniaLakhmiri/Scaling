@@ -52,14 +52,25 @@ dsize = (1, 3, initial_image_size, initial_image_size)
 inputs = torch.randn(dsize).to(device)
 macs, params = profile(model, (inputs,), verbose=False)
 
-
+# -------------------
 # # Output of the blackbox
+# -------------------
+
+# Objective function: MACS
+print('MACS %.3f' % macs)
+
+# Constraint: basline_acc - current_acc < 0: 
 print('> Accuracy %.3f' % (94.0 - best_val_acc))
-print('FLOPS %.3f' % params)
+
+# Also return the number of parameters to keep this stat
+# The number of parameters is not used to guide the optimization
+
+print(' Parameters %.3f' % params)
+
 
 # For ResNet18 with an image size of 32
-macs_baseline = 556651520
-flops_baseline = 11173962
+# macs_baseline = 556651520
+# flops_baseline = 11173962
 
 # ratio_macs = macs / macs_baseline - 1.0
 # ratio_flops = params / flops_baseline - 1.0
