@@ -19,7 +19,6 @@ device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 dataset = 'CIFAR10'
 indx = 1
 depth = float(sys.argv[indx])
-depth = int(round(depth))
 width = float(sys.argv[indx+1])
 resolution = float(sys.argv[indx+2])
 
@@ -46,19 +45,22 @@ evaluator = Evaluator(device, model, trainloader, testloader, optimizer, batch_s
 print('> Training')
 # try:
 best_val_acc, best_epoch, nb_epochs = evaluator.train_and_test()
-# print(best_val_acc)
+
 cnt = 1
 dsize = (1, 3, initial_image_size, initial_image_size)
 inputs = torch.randn(dsize).to(device)
 macs, params = profile(model, (inputs,), verbose=False)
-#
+
+
 # # Output of the blackbox
-print('> Final accuracy %.3f' % best_val_acc)
+print('> Accuracy %.3f' % (94.0 - best_val_acc))
+print('FLOPS %.3f' % params)
 
 # For ResNet18 with an image size of 32
 macs_baseline = 556651520
 flops_baseline = 11173962
 
-const_macs = macs_baseline - macs
-const_flops = flops_baseline - params
-print('MACS and FLOPS', const_macs, const_flops)
+# ratio_macs = macs / macs_baseline - 1.0
+# ratio_flops = params / flops_baseline - 1.0
+# print('MACS and FLOPS', ratio_macs, ratio_flops)
+
