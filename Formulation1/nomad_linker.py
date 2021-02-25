@@ -3,7 +3,7 @@ import sys
 
 
 if len(sys.argv) != 2:
-    print ('Usage of pytorch_bb.py: X.txt')
+    print('Usage of pytorch_bb.py: X.txt')
     exit()
 
 

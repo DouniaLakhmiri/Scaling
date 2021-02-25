@@ -148,7 +148,7 @@ class DataHandler(object):
             transform_train = transforms.Compose([
                 transforms.Resize((new_image_size, new_image_size)),
                 transforms.RandomCrop(new_image_size, padding=4),  # resolution
-                transforms.RandomHorizontalFlip(),
+                # transforms.RandomHorizontalFlip(),
                 transforms.ToTensor(),
                 transforms.Normalize([0.4914, 0.4822, 0.4465],
                                      [0.2023, 0.1994, 0.2010]),

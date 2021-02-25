@@ -179,7 +179,8 @@ class NeuralNet(nn.Module):
         """
         # ResNet18 arch : [2, 2, 2, 2]
         layers = [2, 2, 2, 2]
-        layers = [x*int(round(self.depth)) for x in layers]
+        print(self.depth)
+        layers = [int(round(x*self.depth)) for x in layers]
         print(layers)
         return ResNet(BasicBlock, layers, self.image_size, self.width)
 
